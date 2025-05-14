@@ -1,0 +1,69 @@
+<Window x:Class="ProjektWPF.AddEditTaskWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Zadanie" Height="500" Width="400"
+        WindowStartupLocation="CenterOwner">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Nazwa:" />
+            <TextBox Text="{Binding Task.Name}" />
+
+            <TextBlock Text="Opis:" Margin="0,5,0,0"/>
+            <TextBox Text="{Binding Task.Description}" AcceptsReturn="True" Height="60"/>
+
+            <TextBlock Text="Kategoria:" Margin="0,5,0,0"/>
+            <ComboBox ItemsSource="{Binding Categories}" 
+                      SelectedItem="{Binding Task.Category}" 
+                      DisplayMemberPath="Name" />
+
+            <TextBlock Text="Pilnosc:" Margin="0,5,0,0"/>
+            <ComboBox SelectedValue="{Binding Task.Priority}">
+                <ComboBoxItem Content="Niski" Tag="0" />
+                <ComboBoxItem Content="Sredni" Tag="1" />
+                <ComboBoxItem Content="Wysoki" Tag="2" />
+            </ComboBox>
+
+            <TextBlock Text="Data rozpoczęcia:" Margin="0,5,0,0"/>
+            <DatePicker SelectedDate="{Binding Task.StartDate}" />
+
+            <TextBlock Text="Termin wykonania:" Margin="0,5,0,0"/>
+            <DatePicker SelectedDate="{Binding Task.DueDate}" />
+
+            <CheckBox Content="Ukończone" IsChecked="{Binding Task.IsCompleted}" Margin="0,5,0,0"/>
+
+            <!-- Sekcja podzadań -->
+            <TextBlock Text="Podzadania:" Margin="10,10,0,0"/>
+            <ListBox ItemsSource="{Binding Task.SubTasks}" Height="100" Margin="0,5,0,0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <TextBlock Text="{Binding Name}" DockPanel.Dock="Left"/>
+                            <Button Content="Usuń" DockPanel.Dock="Right" Margin="5,0,0,0"
+                        Click="DeleteSubtask_Click"
+                        Tag="{Binding}" />
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+
+
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <TextBox Width="200" x:Name="SubtaskNameBox" />
+                <Button Content="Dodaj" Width="60" Margin="5,0,0,0"
+            Click="AddSubtask_Click"/>
+            </StackPanel>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="Zapisz" Width="80" Margin="5" IsDefault="True" Command="{Binding SaveCommand}" />
+            <Button Content="Anuluj" Width="80" Margin="5" IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</Window>
