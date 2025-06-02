@@ -1,7 +1,7 @@
 <Window x:Class="ProjektWPF.AddEditTaskWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Zadanie" Height="500" Width="400"
+        Title="Zadanie" Height="600" Width="400"
         WindowStartupLocation="CenterOwner">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -18,8 +18,10 @@
 
             <TextBlock Text="Kategoria:" Margin="0,5,0,0"/>
             <ComboBox ItemsSource="{Binding Categories}" 
-                      SelectedItem="{Binding Task.Category}" 
-                      DisplayMemberPath="Name" />
+                      SelectedValuePath="Id"
+                      DisplayMemberPath="Name"
+                      SelectedValue="{Binding Task.CategoryId}" />
+
 
             <TextBlock Text="Pilnosc:" Margin="0,5,0,0"/>
             <ComboBox SelectedValue="{Binding Task.Priority}">
