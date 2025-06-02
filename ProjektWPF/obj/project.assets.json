@@ -3272,11 +3272,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lukas\\source\\repos\\ProjektWPF\\ProjektWPF\\ProjektWPF.csproj",
+      "projectUniqueName": "C:\\Users\\lukas\\Source\\Repos\\lista-zadan-wpf\\ProjektWPF\\ProjektWPF.csproj",
       "projectName": "ProjektWPF",
-      "projectPath": "C:\\Users\\lukas\\source\\repos\\ProjektWPF\\ProjektWPF\\ProjektWPF.csproj",
+      "projectPath": "C:\\Users\\lukas\\Source\\Repos\\lista-zadan-wpf\\ProjektWPF\\ProjektWPF.csproj",
       "packagesPath": "C:\\Users\\lukas\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lukas\\source\\repos\\ProjektWPF\\ProjektWPF\\obj\\",
+      "outputPath": "C:\\Users\\lukas\\Source\\Repos\\lista-zadan-wpf\\ProjektWPF\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\lukas\\AppData\\Roaming\\NuGet\\NuGet.Config",

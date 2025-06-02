@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -11,6 +12,7 @@ namespace ProjektWPF.models
     // Models/SubTaskItem.cs
     public class SubTaskItem : INotifyPropertyChanged
     {
+        [Key]
         public int Id { get; set; }
         public int TaskItemId { get; set; }
         public TaskItem? TaskItem { get; set; }

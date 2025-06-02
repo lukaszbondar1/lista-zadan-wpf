@@ -49,6 +49,7 @@ namespace ProjektWPF
 
         public string TaskSummary => $"Zadań: {FilteredTasks.Count}, ukończone: {FilteredTasks.Count(t => t.IsCompleted)}";
 
+        public ICommand DeleteTaskCommand { get; }
         public ICommand AddTaskCommand { get; }
         public ICommand FilterCommand { get; }
         public ICommand AddCategoryCommand { get; }
@@ -57,6 +58,7 @@ namespace ProjektWPF
 
         public MainViewModel()
         {
+            DeleteTaskCommand = new RelayCommand<TaskItem>(DeleteTask);
             AddTaskCommand = new RelayCommand(AddTask);
             FilterCommand = new RelayCommand(OpenFilter);
             AddCategoryCommand = new RelayCommand(AddCategory);
@@ -66,15 +68,19 @@ namespace ProjektWPF
 
         private void LoadData()
         {
-            _db.Categories.Load();
-            _db.Tasks.Include(t => t.Category).Load();
+            using var db = new AppDbContext();
 
-            Categories = _db.Categories.Local.ToObservableCollection();
-            FilteredTasks = new ObservableCollection<TaskItem>(_db.Tasks.Local);
+            Categories = new ObservableCollection<Category>(db.Categories.ToList());
+
+            FilteredTasks = new ObservableCollection<TaskItem>(
+                db.Tasks.Include(t => t.Category).Include(t => t.SubTasks).ToList()
+            );
+
             OnPropertyChanged(nameof(Categories));
             OnPropertyChanged(nameof(FilteredTasks));
             OnPropertyChanged(nameof(TaskSummary));
         }
+
 
         private void ApplyFilter()
         {
@@ -116,6 +122,28 @@ namespace ProjektWPF
             window.ShowDialog();
             LoadData(); // odświeżenie listy po edycji
         }
+        private void DeleteTask(TaskItem? task)
+        {
+            if (task == null) return;
+
+            if (MessageBox.Show($"Czy na pewno chcesz usunąć zadanie: '{task.Name}'?", "Potwierdzenie",
+                MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                using var db = new AppDbContext();
+
+                // Załaduj pełne dane zadania (z podzadaniami)
+                var taskToDelete = db.Tasks.Include(t => t.SubTasks).FirstOrDefault(t => t.Id == task.Id);
+                if (taskToDelete != null)
+                {
+                    db.SubTasks.RemoveRange(taskToDelete.SubTasks);
+                    db.Tasks.Remove(taskToDelete);
+                    db.SaveChanges();
+                }
+
+                LoadData(); // Odświeżenie widoku
+            }
+        }
+
 
         private void OpenFilter()
         {

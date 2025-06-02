@@ -33,11 +33,10 @@
 
             <!-- Sidebar: Kategorie -->
             <StackPanel Grid.Column="0" Margin="5">
-                <TextBlock Text="Kategorie" FontWeight="Bold" Margin="0 0 0 5"/>
+                <Button Content="Kategorie" FontWeight="Bold" Command="{Binding AddCategoryCommand}" Margin="0 10 0 0"/>
                 <ListBox ItemsSource="{Binding Categories}"
                          SelectedItem="{Binding SelectedCategory}"
                          DisplayMemberPath="Name" />
-                <Button Content="Dodaj kategorię" Command="{Binding AddCategoryCommand}" Margin="0 10 0 0"/>
             </StackPanel>
 
             <!-- Lista zadań -->
@@ -71,7 +70,11 @@
                                 <!-- Przyciski pod zadaniem -->
                                 <Button Content="Edytuj" Margin="0,10,0,0" HorizontalAlignment="Right"
                                 Command="{Binding DataContext.EditTaskCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}" />
+                                <Button Content="Usuń" Margin="0,10,0,0" HorizontalAlignment="Right"
+                                Command="{Binding DataContext.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding}" />     
+
 
                             </StackPanel>
                         </Expander>

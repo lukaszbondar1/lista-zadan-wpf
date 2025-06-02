@@ -67,6 +67,15 @@ namespace ProjektWPF
         private void Delete()
         {
             if (SelectedCategory == null) return;
+
+            var taskCount = _db.Tasks.Count(t => t.CategoryId == SelectedCategory.Id);
+            if (taskCount > 0)
+            {
+                MessageBox.Show("Nie można usunąć kategorii, ponieważ zawiera przypisane zadania.",
+                                "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             if (MessageBox.Show("Usunąć kategorię?", "Potwierdzenie", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 _db.Categories.Remove(SelectedCategory);
@@ -74,6 +83,7 @@ namespace ProjektWPF
                 Categories.Remove(SelectedCategory);
             }
         }
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? name = null)

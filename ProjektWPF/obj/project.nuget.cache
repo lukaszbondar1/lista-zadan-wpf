@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "AkdR6qVUV0o=",
+  "dgSpecHash": "/IL9Ep45mDk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\lukas\\source\\repos\\ProjektWPF\\ProjektWPF\\ProjektWPF.csproj",
+  "projectFilePath": "C:\\Users\\lukas\\Source\\Repos\\lista-zadan-wpf\\ProjektWPF\\ProjektWPF.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lukas\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\lukas\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
