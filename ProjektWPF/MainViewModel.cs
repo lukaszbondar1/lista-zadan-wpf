@@ -17,8 +17,8 @@ namespace ProjektWPF
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly AppDbContext _db = new();
-
         private FilterViewModel _filter;
+        private ObservableCollection<TaskItem> _allTasks = new();
 
         public ObservableCollection<TaskItem> FilteredTasks { get; set; } = new();
         public ObservableCollection<Category> Categories { get; set; } = new();
@@ -54,7 +54,7 @@ namespace ProjektWPF
         public ICommand FilterCommand { get; }
         public ICommand AddCategoryCommand { get; }
         public ICommand EditTaskCommand { get; }
-
+        public ICommand UpdateSubTaskCommand { get; }
 
         public MainViewModel()
         {
@@ -63,6 +63,7 @@ namespace ProjektWPF
             FilterCommand = new RelayCommand(OpenFilter);
             AddCategoryCommand = new RelayCommand(AddCategory);
             EditTaskCommand = new RelayCommand<TaskItem>(EditTask);
+            UpdateSubTaskCommand = new RelayCommand<SubTaskItem>(UpdateSubTask);
             LoadData();
         }
 
@@ -70,42 +71,105 @@ namespace ProjektWPF
         {
             using var db = new AppDbContext();
 
-            Categories = new ObservableCollection<Category>(db.Categories.ToList());
+            Categories.Clear();
+            var categories = db.Categories.ToList();
+            foreach (var category in categories)
+            {
+                Categories.Add(category);
+            }
 
-            FilteredTasks = new ObservableCollection<TaskItem>(
-                db.Tasks.Include(t => t.Category).Include(t => t.SubTasks).ToList()
-            );
+            _allTasks.Clear();
+            var tasks = db.Tasks.Include(t => t.Category).Include(t => t.SubTasks).ToList();
 
+            foreach (var task in tasks)
+            {
+                // Upewnij się, że SubTasks są prawidłowo załadowane
+                if (task.SubTasks != null)
+                {
+                    foreach (var subTask in task.SubTasks)
+                    {
+                        subTask.PropertyChanged += SubTask_PropertyChanged;
+                    }
+                }
+                _allTasks.Add(task);
+            }
+
+            ApplyFilter();
             OnPropertyChanged(nameof(Categories));
-            OnPropertyChanged(nameof(FilteredTasks));
             OnPropertyChanged(nameof(TaskSummary));
         }
 
+        private void SubTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SubTaskItem.IsDone) && sender is SubTaskItem subTask)
+            {
+                UpdateSubTask(subTask);
+            }
+        }
+
+        private void UpdateSubTask(SubTaskItem subTask)
+        {
+            if (subTask == null) return;
+
+            try
+            {
+                using var db = new AppDbContext();
+                var dbSubTask = db.SubTasks.FirstOrDefault(st => st.Id == subTask.Id);
+                if (dbSubTask != null)
+                {
+                    dbSubTask.IsDone = subTask.IsDone;
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Błąd podczas aktualizacji podzadania: {ex.Message}", "Błąd",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private void ApplyFilter()
         {
-            var tasks = _db.Tasks.Include(t => t.Category).AsQueryable();
+            var filteredTasks = _allTasks.AsEnumerable();
 
             if (!string.IsNullOrWhiteSpace(SearchText))
-                tasks = tasks.Where(t => t.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+            {
+                filteredTasks = filteredTasks.Where(t =>
+                    t.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+            }
 
             if (SelectedCategory != null)
-                tasks = tasks.Where(t => t.CategoryId == SelectedCategory.Id);
+            {
+                filteredTasks = filteredTasks.Where(t => t.CategoryId == SelectedCategory.Id);
+            }
 
             if (_filter?.SelectedCategory != null)
-                tasks = tasks.Where(t => t.CategoryId == _filter.SelectedCategory.Id);
-
+            {
+                filteredTasks = filteredTasks.Where(t => t.CategoryId == _filter.SelectedCategory.Id);
+            }
 
             if (_filter?.SelectedPriority != null)
-                tasks = tasks.Where(t => t.Priority == _filter.SelectedPriority);
+            {
+                filteredTasks = filteredTasks.Where(t => t.Priority == _filter.SelectedPriority);
+            }
 
             if (_filter?.SelectedStatus != null)
-                tasks = tasks.Where(t => t.IsCompleted == _filter.SelectedStatus);
+            {
+                filteredTasks = filteredTasks.Where(t => t.IsCompleted == _filter.SelectedStatus);
+            }
 
             if (_filter?.DueBefore != null)
-                tasks = tasks.Where(t => t.DueDate != null && t.DueDate <= _filter.DueBefore);
+            {
+                filteredTasks = filteredTasks.Where(t =>
+                    t.DueDate != null && t.DueDate <= _filter.DueBefore);
+            }
 
-            FilteredTasks = new ObservableCollection<TaskItem>(tasks.ToList());
+            FilteredTasks.Clear();
+            foreach (var task in filteredTasks)
+            {
+                FilteredTasks.Add(task);
+            }
+
             OnPropertyChanged(nameof(FilteredTasks));
             OnPropertyChanged(nameof(TaskSummary));
         }
@@ -115,8 +179,9 @@ namespace ProjektWPF
             var window = new AddEditTaskWindow();
             window.Owner = Application.Current.MainWindow;
             window.ShowDialog();
-            LoadData(); // odświeżenie
+            LoadData();
         }
+
         private void EditTask(TaskItem task)
         {
             if (task == null) return;
@@ -124,8 +189,9 @@ namespace ProjektWPF
             var window = new AddEditTaskWindow(task);
             window.Owner = Application.Current.MainWindow;
             window.ShowDialog();
-            LoadData(); // odświeżenie listy po edycji
+            LoadData();
         }
+
         private void DeleteTask(TaskItem? task)
         {
             if (task == null) return;
@@ -135,7 +201,6 @@ namespace ProjektWPF
             {
                 using var db = new AppDbContext();
 
-                // Załaduj pełne dane zadania (z podzadaniami)
                 var taskToDelete = db.Tasks.Include(t => t.SubTasks).FirstOrDefault(t => t.Id == task.Id);
                 if (taskToDelete != null)
                 {
@@ -144,10 +209,9 @@ namespace ProjektWPF
                     db.SaveChanges();
                 }
 
-                LoadData(); // Odświeżenie widoku
+                LoadData();
             }
         }
-
 
         private void OpenFilter()
         {
@@ -162,13 +226,15 @@ namespace ProjektWPF
             };
             filterWindow.ShowDialog();
         }
+
         private void AddCategory()
         {
             var window = new CategoryManagerWindow();
             window.Owner = Application.Current.MainWindow;
             window.ShowDialog();
-            LoadData(); // odświeżenie listy po zmianach
+            LoadData();
         }
+
         public ICommand ClearCategoryFilterCommand => new RelayCommand(() =>
         {
             SelectedCategory = null;
@@ -184,7 +250,24 @@ namespace ProjektWPF
             ApplyFilter();
         });
 
-
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // Odłącz event handlery
+                foreach (var task in _allTasks)
+                {
+                    if (task.SubTasks != null)
+                    {
+                        foreach (var subTask in task.SubTasks)
+                        {
+                            subTask.PropertyChanged -= SubTask_PropertyChanged;
+                        }
+                    }
+                }
+                _db?.Dispose();
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
