@@ -172,7 +172,18 @@ namespace ProjektWPF
         public ICommand ClearCategoryFilterCommand => new RelayCommand(() =>
         {
             SelectedCategory = null;
+
+            if (_filter != null)
+            {
+                _filter.SelectedCategory = null;
+                _filter.SelectedPriority = null;
+                _filter.SelectedStatus = null;
+                _filter.DueBefore = null;
+            }
+
+            ApplyFilter();
         });
+
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
