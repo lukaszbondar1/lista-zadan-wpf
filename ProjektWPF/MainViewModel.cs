@@ -83,7 +83,6 @@ namespace ProjektWPF
 
             foreach (var task in tasks)
             {
-                // Upewnij się, że SubTasks są prawidłowo załadowane
                 if (task.SubTasks != null)
                 {
                     foreach (var subTask in task.SubTasks)
@@ -254,7 +253,6 @@ namespace ProjektWPF
         {
             if (disposing)
             {
-                // Odłącz event handlery
                 foreach (var task in _allTasks)
                 {
                     if (task.SubTasks != null)
