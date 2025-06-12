@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\lukas\Source\Repos\lista-zadan-wpf\ProjektWPF\obj\Debug\net8.0-windows\
+G:\WPF\lista-zadan-wpf\ProjektWPF\obj\Debug\net8.0-windows\
 ProjektWPF
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\Users\lukas\Source\Repos\lista-zadan-wpf\ProjektWPF\App.xaml
-41857792768
+G:\WPF\lista-zadan-wpf\ProjektWPF\App.xaml
+51471042828
 
-26222827383
-2171589599709
-AddEditTaskWindow.xaml;CategoryManagerWindow.xaml;FilterWindow.xaml;MainWindow.xaml;
+27903274318
+228-562389905
+AddEditTaskWindow.xaml;CategoryManagerWindow.xaml;FilterWindow.xaml;MainWindow.xaml;StatisticWindow.xaml;
 
-False
+True
 
