@@ -1,4 +1,4 @@
-﻿using ProjektWPF.Data;
+using ProjektWPF.Data;
 using ProjektWPF.models;
 using System;
 using System.Collections.Generic;
@@ -89,8 +89,12 @@ namespace ProjektWPF
             if (!string.IsNullOrWhiteSpace(SearchText))
                 tasks = tasks.Where(t => t.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
 
+            if (SelectedCategory != null)
+                tasks = tasks.Where(t => t.CategoryId == SelectedCategory.Id);
+
             if (_filter?.SelectedCategory != null)
                 tasks = tasks.Where(t => t.CategoryId == _filter.SelectedCategory.Id);
+
 
             if (_filter?.SelectedPriority != null)
                 tasks = tasks.Where(t => t.Priority == _filter.SelectedPriority);
@@ -165,6 +169,10 @@ namespace ProjektWPF
             window.ShowDialog();
             LoadData(); // odświeżenie listy po zmianach
         }
+        public ICommand ClearCategoryFilterCommand => new RelayCommand(() =>
+        {
+            SelectedCategory = null;
+        });
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
