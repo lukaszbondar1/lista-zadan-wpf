@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "G:\\WPF\\lista-zadan-wpf\\ProjektWPF\\ProjektWPF.csproj": {}
+    "C:\\Users\\lukas\\Desktop\\ProjektWPF_prefinal\\ProjektWPF\\ProjektWPF.csproj": {}
   },
   "projects": {
-    "G:\\WPF\\lista-zadan-wpf\\ProjektWPF\\ProjektWPF.csproj": {
+    "C:\\Users\\lukas\\Desktop\\ProjektWPF_prefinal\\ProjektWPF\\ProjektWPF.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\WPF\\lista-zadan-wpf\\ProjektWPF\\ProjektWPF.csproj",
+        "projectUniqueName": "C:\\Users\\lukas\\Desktop\\ProjektWPF_prefinal\\ProjektWPF\\ProjektWPF.csproj",
         "projectName": "ProjektWPF",
-        "projectPath": "G:\\WPF\\lista-zadan-wpf\\ProjektWPF\\ProjektWPF.csproj",
-        "packagesPath": "C:\\Users\\Szef\\.nuget\\packages\\",
-        "outputPath": "G:\\WPF\\lista-zadan-wpf\\ProjektWPF\\obj\\",
+        "projectPath": "C:\\Users\\lukas\\Desktop\\ProjektWPF_prefinal\\ProjektWPF\\ProjektWPF.csproj",
+        "packagesPath": "C:\\Users\\lukas\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lukas\\Desktop\\ProjektWPF_prefinal\\ProjektWPF\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Szef\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\lukas\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -92,7 +92,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

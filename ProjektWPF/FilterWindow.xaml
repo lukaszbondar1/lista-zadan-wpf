@@ -11,19 +11,20 @@
                       DisplayMemberPath="Name" />
 
             <TextBlock Text="Pilnosc:" Margin="0,10,0,0"/>
-            <ComboBox SelectedValue="{Binding SelectedPriority}">
-                <ComboBoxItem Content="(wszystkie)" Tag="{x:Null}" />
-                <ComboBoxItem Content="Niski" Tag="0" />
-                <ComboBoxItem Content="Sredni" Tag="1" />
-                <ComboBoxItem Content="Wysoki" Tag="2" />
+            <ComboBox ItemsSource="{Binding PriorityLevels}"
+                SelectedItem="{Binding SelectedPriority}" Margin="0,5,0,0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
             </ComboBox>
 
+
             <TextBlock Text="Status:" Margin="0,10,0,0"/>
-            <ComboBox SelectedValue="{Binding SelectedStatus}">
-                <ComboBoxItem Content="(wszystkie)" Tag="{x:Null}" />
-                <ComboBoxItem Content="Ukonczone" Tag="true" />
-                <ComboBoxItem Content="Nieukonczone" Tag="false" />
-            </ComboBox>
+            <ComboBox ItemsSource="{Binding StatusOptions}"
+          SelectedItem="{Binding SelectedStatusOption}" DisplayMemberPath="Name"/>
+
 
             <TextBlock Text="Termin do dnia:" Margin="0,10,0,0"/>
             <DatePicker SelectedDate="{Binding DueBefore}" />
@@ -31,6 +32,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
                 <Button Content="Zastosuj" Width="80" Margin="5" IsDefault="True" Command="{Binding ApplyCommand}" />
                 <Button Content="Anuluj" Width="80" Margin="5" IsCancel="True" />
+                <Button Content="Resetuj" Width="80" Margin="5" Command="{Binding ResetCommand}" />
             </StackPanel>
         </StackPanel>
     </Grid>

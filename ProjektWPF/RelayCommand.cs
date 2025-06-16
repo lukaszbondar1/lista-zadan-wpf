@@ -18,7 +18,6 @@ namespace ProjektWPF
             _canExecute = canExecute;
         }
 
-
         public bool CanExecute(object? parameter) => _canExecute == null || _canExecute();
 
         public void Execute(object? parameter) => _execute();
@@ -29,6 +28,7 @@ namespace ProjektWPF
             remove => CommandManager.RequerySuggested -= value;
         }
     }
+
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _execute;

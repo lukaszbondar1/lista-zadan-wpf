@@ -29,17 +29,29 @@ namespace ProjektWPF
         public MainWindow()
         {
             InitializeComponent();
-
         }
+
         public class ZenQuote
         {
-            public string q { get; set; } // Quote
-            public string a { get; set; } // Author
+            public string q { get; set; }
+            public string a { get; set; }
         }
+
         private void ShowStatistics_Click(object sender, RoutedEventArgs e)
         {
-            //var statsWindow = new StatisticWindow(tasks.ToList());
-            //statsWindow.ShowDialog();
+            if (DataContext is MainViewModel vm)
+            {
+                var statsWindow = new StatisticsWindow
+                {
+                    Owner = this,
+                    DataContext = new StatisticsViewModel(vm.FilteredTasks)
+                };
+                statsWindow.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Nie udało się załadować statystyk.");
+            }
         }
 
         private async void FetchZenQuote_Click(object sender, RoutedEventArgs e)
@@ -58,9 +70,7 @@ namespace ProjektWPF
                     {
                         var quote = quotes[0];
                         MessageBox.Show($"\"{quote.q}\"\n\n— {quote.a}", "Cytat motywacyjny");
-                        string text = $"\"{quote.q}\"\n— {quote.a}";
-                        // Save to file
-                        File.WriteAllText("last_quote.txt", text);
+                        File.WriteAllText("last_quote.txt", $"\"{quote.q}\"\n— {quote.a}");
                     }
                     else
                     {
@@ -77,6 +87,5 @@ namespace ProjektWPF
                 MessageBox.Show($"Błąd: {ex.Message}");
             }
         }
-
     }
 }

@@ -1,0 +1,33 @@
+<UserControl x:Class="ProjektWPF.Controls.FilterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ProjektWPF"
+             xmlns:models="clr-namespace:ProjektWPF.models"
+             Width="Auto" Height="Auto">
+    <Border Padding="10" >
+        <StackPanel>
+            <TextBlock Text="Kategoria:" />
+            <ComboBox ItemsSource="{Binding Categories}"
+                      SelectedItem="{Binding SelectedCategory}"
+                      DisplayMemberPath="Name" />
+
+            <TextBlock Text="Pilnosc:" Margin="0,10,0,0"/>
+            <ComboBox ItemsSource="{Binding PriorityLevels}"
+                      SelectedItem="{Binding SelectedPriority}" />
+
+            <TextBlock Text="Status:" Margin="0,10,0,0"/>
+            <ComboBox ItemsSource="{Binding StatusOptions}"
+                      SelectedItem="{Binding SelectedStatusOption}"
+                      DisplayMemberPath="Name" />
+
+            <TextBlock Text="Termin do dnia:" Margin="0,10,0,0"/>
+            <DatePicker SelectedDate="{Binding DueBefore}" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                <Button Content="Zastosuj" Width="80" Margin="5" Command="{Binding ApplyCommand}" />
+                <Button Content="Resetuj" Width="80" Margin="5" Command="{Binding ResetCommand}" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>
+
